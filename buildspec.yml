@@ -40,13 +40,13 @@ phases:
 
       - ImageURI=$(cat imageDetail.json | jq -r '.ImageURI')
 
-      - printf '[{"name":"container_name","imageUri":"image_URI"}]' > managementrepo.json
+      - printf '[{"name":"container_name","imageUri":"image_URI"}]' > managementtask.json
 
-      - sed -i -e "s|CONTAINER_NAME|$ContainerName|g" managementrepo.json
+      - sed -i -e "s|CONTAINER_NAME|$ContainerName|g" managementtask.json
 
-      - sed -i -e "s|IMAGE_URI|$ImageURI|g" managementrepo.json
+      - sed -i -e "s|IMAGE_URI|$ImageURI|g" managementtask.json
 
-      - cat managementrepo.json
+      - cat managementtask.json
 
  
 
@@ -66,9 +66,9 @@ phases:
 
       - echo Writing image definitions file...
 
-      - printf '[{"name":"automatorgo-release","imageUri":"%s"}]'    125571554996.dkr.ecr.ap-south-1.amazonaws.com/managementrepo:$CODEBUILD_BUILD_NUMBER > managementrepo.json
+      - printf '[{"name":"automatorgo-release","imageUri":"%s"}]'    125571554996.dkr.ecr.ap-south-1.amazonaws.com/managementrepo:$CODEBUILD_BUILD_NUMBER > managementtask.json
 
-      - cat managementrepo.json
+      - cat managementtask.json
 
       - echo Start post_build...
 
@@ -84,6 +84,6 @@ artifacts:
 
     - imageDetail.json
 
-    - managementrepo.json
+    - managementtask.json
 
   discard-paths: no
