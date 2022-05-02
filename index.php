@@ -10,7 +10,7 @@
     <body>
         
         <h3 align="right"><a href="login.php">Admin Login</a></h3>
-        <h1 align="center"> Welcome To Student Management System</h1>
+        <h1 align="center"> Welcome To Student Multitv</h1>
         
         
         <form method="post" action="index.php" >
