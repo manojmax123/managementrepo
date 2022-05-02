@@ -1,18 +1,89 @@
-version: 0.2
+---
 
 phases:
+
   pre_build:
+
     commands:
-      - echo Logging in to Amazon ECR...
+
+      - "echo Logging in to Docker Hub..."
+
+      - "echo Logging in to Amazon ECR..."
+
+      - aws --version
+
+      - name=managementrepo
+
       - aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 125571554996.dkr.ecr.ap-south-1.amazonaws.com
+
+      - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
+
+      - IMAGE_TAG=build-$(echo $CODEBUILD_BUILD_ID | awk -F":" '{print $2}')
+
+    
+
   build:
+
     commands:
-      - echo Build started on `date`
-      - echo Building the Docker image...          
-      - docker build -t managementrepo .
-      - docker tag managementrepo:latest 125571554996.dkr.ecr.ap-south-1.amazonaws.com/managementrepo:latest
+
+      - "echo Build started on `date`"
+
+      - "echo Building the Docker image..."
+
+      - "docker build -t managementrepo ."
+
+      - echo $CODEBUILD_BUILD_NUMBER
+
+      - IMAGE_TAG=build-$(echo $CODEBUILD_BUILD_ID | awk -F":" '{print $2}')
+
+      - "docker tag managementrepo:latest 125571554996.dkr.ecr.ap-south-1.amazonaws.com/managementrepo:$CODEBUILD_BUILD_NUMBER"
+
+      - ImageURI=$(cat imageDetail.json | jq -r '.ImageURI')
+
+      - printf '[{"name":"container_name","imageUri":"image_URI"}]' > managementrepo.json
+
+      - sed -i -e "s|CONTAINER_NAME|$ContainerName|g" managementrepo.json
+
+      - sed -i -e "s|IMAGE_URI|$ImageURI|g" managementrepo.json
+
+      - cat managementrepo.json
+
+ 
+
   post_build:
+
     commands:
+
       - echo Build completed on `date`
-      - echo Pushing the Docker image...
-      - docker push 125571554996.dkr.ecr.ap-south-1.amazonaws.com/managementrepo:latest
+
+      - echo Pushing the Docker images...
+
+      - echo $CODEBUILD_BUILD_NUMBER
+
+      - IMAGE_TAG=build-$(echo $CODEBUILD_BUILD_ID | awk -F":" '{print $2}')
+
+      - docker push 125571554996.dkr.ecr.ap-south-1.amazonaws.com/managementrepo:$CODEBUILD_BUILD_NUMBER
+
+      - echo Writing image definitions file...
+
+      - printf '[{"name":"automatorgo-release","imageUri":"%s"}]'    125571554996.dkr.ecr.ap-south-1.amazonaws.com/managementrepo:$CODEBUILD_BUILD_NUMBER > managementrepo.json
+
+      - cat managementrepo.json
+
+      - echo Start post_build...
+
+ 
+
+version: 0.1
+
+artifacts:
+
+  files:
+
+    - '**/*'
+
+    - imageDetail.json
+
+    - managementrepo.json
+
+  discard-paths: no
