@@ -66,7 +66,7 @@ phases:
 
       - echo Writing image definitions file...
 
-      - printf '[{"name":"automatorgo-release","imageUri":"%s"}]'    125571554996.dkr.ecr.ap-south-1.amazonaws.com/managementrepo:$CODEBUILD_BUILD_NUMBER > managementtask.json
+      - printf '[{"name":"managementrepo","imageUri":"%s"}]'    125571554996.dkr.ecr.ap-south-1.amazonaws.com/managementrepo:$CODEBUILD_BUILD_NUMBER > managementtask.json
 
       - cat managementtask.json
 
