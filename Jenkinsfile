@@ -4,7 +4,7 @@ pipeline {
         stage('Build') {
             steps {
                 // Get code from a GitHub repository
-                git url: 'https://github.com/naiveskill/devops_cred.git', branch: 'main',
+                git url: 'https://https://github.com/manojmax123/managementrepo.git', branch: 'master',
                  credentialsId: 'github_creds'
             }
         }
