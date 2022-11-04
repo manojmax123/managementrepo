@@ -4,7 +4,7 @@
         <link rel="stylesheet" href="index.css">
         <script src="jquery-3.3.1.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-        <title> manoj Management System</title>
+        <title> student Management System</title>
         
     </head>
     <body>
